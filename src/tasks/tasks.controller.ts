@@ -1,9 +1,7 @@
 import { Controller, Post } from '@nestjs/common';
+import { TasksService } from 'src/tasks/tasks.service';
 
 @Controller('tasks')
 export class TasksController {
-  @Post('')
-  createTask() {
-    return true;
-  }
+  constructor(private tasksService: TasksService) {}
 }
