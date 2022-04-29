@@ -51,6 +51,9 @@ export class TasksService {
     const { status } = updateTaskDto;
     const tasks = [...this.tasks];
     const updatedIndex = this.tasks.findIndex((task) => task.id === id);
+    if (!updatedIndex) {
+      throw new NotFoundException();
+    }
     tasks[updatedIndex].status = status;
     this.tasks = tasks;
     return tasks[updatedIndex];
@@ -68,7 +71,11 @@ export class TasksService {
     return task;
   }
   deleteTask(id: string): void {
-    this.tasks = this.tasks.filter((task) => task.id !== id);
+    const found = this.getTaskById(id);
+    if (!found) {
+      throw new NotFoundException();
+    }
+    this.tasks = this.tasks.filter((task) => task.id !== found.id);
     // const deletedIndex = this.tasks.findIndex((task) => task.id === id);
     // // if (deletedIndex === -1) {
     // //   throw new Error('not found');
