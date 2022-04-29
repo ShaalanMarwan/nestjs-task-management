@@ -1,15 +1,42 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTaskDto } from 'src/tasks/dto/create-task.dto';
+import { GetTasksDto } from 'src/tasks/dto/get-tasks.dto';
 import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
-import { Task, TasksEnum } from 'src/tasks/task.model';
+import { Task, TasksStatusEnum } from 'src/tasks/task.model';
 import { v4 as uuid } from 'uuid';
 @Injectable()
 export class TasksService {
   private tasks: Task[] = [];
 
-  getTasks(): Task[] {
-    return this.tasks;
+  getTasks(filterDto: GetTasksDto): Task[] {
+    const { status, q } = filterDto;
+    let tasks = this.tasks;
+
+    if (status) {
+      tasks = tasks.filter((task) => task.status === status);
+    }
+
+    if (q) {
+      tasks = tasks.filter(
+        (task) => task.title.includes(q) || task.description.includes(q),
+      );
+    }
+
+    return tasks;
   }
+
+  // getTasks(getTasksDto: GetTasksDto): Task[] {
+  //   const { q, status } = getTasksDto;
+
+  //   return this.tasks.filter(
+  //     (task) =>
+  //       (status !== undefined &&
+  //         task.status === status &&
+  //         q !== undefined &&
+  //         task.description.includes(q)) ||
+  //       task.title.includes(q),
+  //   );
+  // }
 
   getTaskById(id: string): Task {
     return this.tasks.find((task) => task.id === id);
@@ -30,7 +57,7 @@ export class TasksService {
       id: uuid(),
       title,
       description,
-      status: TasksEnum.OPEN,
+      status: TasksStatusEnum.OPEN,
     };
     this.tasks.push(task);
     return task;
