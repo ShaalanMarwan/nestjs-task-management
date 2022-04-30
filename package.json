@@ -32,8 +32,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.5.5",
     "tslib": "^2.4.0",
-    "typeorm": "^0.2.34",
-    "uuid": "^8.3.2"
+    "typeorm": "^0.2.34"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.6.0",
