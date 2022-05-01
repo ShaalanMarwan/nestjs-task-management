@@ -15,9 +15,9 @@ export class TaskRepository extends Repository<Task> {
             query.andWhere('task.status = :status', { status });
         }
         if (q) {
-            //   'LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search)', //case insensitive
+            //   '(LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search))', //case insensitive
             query.andWhere(
-                'task.title LIKE :search OR task.description LIKE :search', //case sensitive
+                '(task.title LIKE :search OR task.description LIKE :search)', //case sensitive
                 {
                     search: `%${q}%`,
                 },
